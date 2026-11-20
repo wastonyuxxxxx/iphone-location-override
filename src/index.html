@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="local-token" content="%%LOCAL_TOKEN%%">
+  <title>iPhone 定位测试</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <h1>iPhone 定位测试</h1>
+      <p>通过 USB 设置短时测试位置，并在结束后恢复真实定位。</p>
+    </header>
+
+    <div class="workspace">
+      <section class="panel settings" aria-labelledby="location-title">
+        <h2 id="location-title">测试位置</h2>
+        <form class="place-search" id="place-search">
+          <label for="query">地点或地址</label>
+          <div class="search-row">
+            <input id="query" name="query" type="search" placeholder="例如 北京市天安门广场" maxlength="100" required>
+            <button id="search" class="secondary" type="submit">搜索</button>
+          </div>
+          <p class="hint search-hint" id="search-message" aria-live="polite">点击搜索时，输入的文字会发送给 Apple 地图。</p>
+          <ul id="search-results" class="results" aria-label="搜索结果" hidden></ul>
+        </form>
+        <form id="settings" aria-label="经纬度和测试时长">
+        <div class="coordinates">
+          <label>纬度
+            <input name="latitude" type="number" inputmode="decimal" min="-90" max="90" step="any" placeholder="39.9087" required>
+          </label>
+          <label>经度
+            <input name="longitude" type="number" inputmode="decimal" min="-180" max="180" step="any" placeholder="116.3975" required>
+          </label>
+        </div>
+        <label class="duration">测试时长（秒）
+          <input name="seconds" type="number" inputmode="numeric" min="1" max="180" step="1" value="120" required>
+        </label>
+        <button class="primary" id="start" type="submit" disabled>开始模拟</button>
+        <p class="hint">使用 WGS84 十进制度坐标。模拟期间，其他 App 也可能读到测试位置。</p>
+        </form>
+      </section>
+
+      <section class="panel status" aria-labelledby="status-title">
+        <div class="status-heading">
+          <h2 id="status-title">运行状态</h2>
+          <span class="state" id="state" role="status">正在连接页面</span>
+        </div>
+        <div class="clock" aria-label="剩余时间">
+          <p class="clock-label">剩余时间</p>
+          <p id="clock" class="clock-value">—</p>
+          <p id="point" class="point" hidden></p>
+        </div>
+        <p id="message" class="message" aria-live="polite">请保持本机定位工具运行。</p>
+        <div class="actions">
+          <button class="secondary restore" id="restore" type="button" disabled>恢复真实定位</button>
+          <button class="secondary check" id="check" type="button" disabled>检查 USB 连接</button>
+        </div>
+      </section>
+    </div>
+
+    <aside class="notes" aria-label="测试提示">
+      <p><strong>开始前</strong> 用数据线连接并解锁 iPhone，确认已信任此 Mac，已开启开发者模式。</p>
+      <p><strong>在手机上</strong> 打开自用测试表单，获取位置并现场拍摄。测试停在提交前。</p>
+      <p><strong>结束后</strong> 等待自动恢复或点击恢复按钮，在 Apple 地图中确认当前位置。</p>
+    </aside>
+  </main>
+
+  <dialog id="confirm" aria-labelledby="confirm-title">
+    <form method="dialog">
+      <h2 id="confirm-title">确认设置测试定位</h2>
+      <p id="review"></p>
+      <p class="hint">这会临时改变整台 iPhone 提供给 App 的系统定位。</p>
+      <div class="dialog-actions">
+        <button class="secondary" value="cancel" autofocus>取消</button>
+        <button class="primary" value="start">确认开始</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
